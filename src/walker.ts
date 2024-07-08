@@ -1,5 +1,20 @@
-export function startWalk() {
-	console.log("startWalk");
+import { roomQuestions, placeRobotQuestion } from "./questions";
+
+type Robot = {
+	x: number;
+	y: number;
+	orientation: string;
+};
+
+let room: number[][];
+let robot: Robot;
+
+export async function startWalk() {
+	const { width, height } = roomQuestions();
+	room = createArea(width, height);
+
+	const { x, y, dirr } = placeRobotQuestion();
+	placeRobot(x, y, dirr);
 }
 
 /**
@@ -17,8 +32,8 @@ export function createArea(x: number, y: number): number[][] {
 	return Array(y).fill(Array(x).fill(0));
 }
 
-export function placeRobot(x: number, y: number) {
-	console.log("placeRobot", x, y);
+export function placeRobot(x: number, y: number, dirrection: string) {
+	console.log("placeRobot", x, y, dirrection);
 }
 
 export function moveRobot() {
