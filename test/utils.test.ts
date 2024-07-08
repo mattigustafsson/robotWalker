@@ -1,4 +1,4 @@
-import { integerCheck, moveCheck, dirrectionCheck } from "../src/utils";
+import { integerCheck, moveCheck, directionCheck } from "../src/utils";
 import { describe, expect, it } from "bun:test";
 
 describe("utils", () => {
@@ -24,12 +24,12 @@ describe("utils", () => {
 		});
 	});
 
-	describe("dirrectionCheck", () => {
+	describe("directionCheck", () => {
 		it("should return a valid direction", () => {
-			expect(dirrectionCheck("N")).toBe("N");
+			expect(directionCheck("N")).toBe("N");
 		});
 		it("should throw an error if input is not a valid direction", () => {
-			expect(() => dirrectionCheck("test")).toThrow();
+			expect(() => directionCheck("test")).toThrow();
 		});
 	});
 });

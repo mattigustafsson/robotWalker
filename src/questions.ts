@@ -2,7 +2,7 @@ import {
 	integerCheck,
 	moveCheck,
 	promptWithNullCheck,
-	dirrectionCheck,
+	directionCheck,
 } from "./utils";
 
 export function roomQuestions() {
@@ -29,19 +29,22 @@ export function placeRobotQuestion() {
 	const yInput = promptWithNullCheck("Input y coordinate for the robot: ");
 	const y = integerCheck(yInput);
 
-	const dirrInput = promptWithNullCheck("Input direction for the robot: ");
-	const dirr = dirrectionCheck(dirrInput);
+	const dirInput = promptWithNullCheck("Input direction for the robot: ");
+	const dir = directionCheck(dirInput);
 
 	return {
 		x,
 		y,
-		dirr,
+		dir,
 	};
 }
 
 export function moveRobotQuestion() {
 	let answer: string;
 	do {
-		answer = promptWithNullCheck("Input path of the robot: ");
-	} while (moveCheck(answer));
+		answer = promptWithNullCheck(
+			"Input path of the robot, valid input is 'l', 'r', or 'f': ",
+		);
+	} while (!moveCheck(answer));
+	return answer;
 }

@@ -1,9 +1,13 @@
-import { roomQuestions, placeRobotQuestion } from "./questions";
+import {
+	roomQuestions,
+	placeRobotQuestion,
+	moveRobotQuestion,
+} from "./questions";
 
 type Robot = {
 	x: number;
 	y: number;
-	orientation: string;
+	direction: string;
 };
 
 let room: number[][];
@@ -13,8 +17,15 @@ export async function startWalk() {
 	const { width, height } = roomQuestions();
 	room = createArea(width, height);
 
-	const { x, y, dirr } = placeRobotQuestion();
-	placeRobot(x, y, dirr);
+	const { x, y, dir } = placeRobotQuestion();
+	robot = { x, y, direction: dir };
+	placeRobot(robot);
+
+	const moveInput = moveRobotQuestion();
+	moveRobot(moveInput, robot);
+
+	// Report back robot position and direction
+	// console.log(robot x, y and direction);
 }
 
 /**
@@ -25,17 +36,14 @@ export async function startWalk() {
  * @throws {Error} If x or y is less than or equal to zero.
  */
 export function createArea(x: number, y: number): number[][] {
-	if (x <= 0 || y <= 0) {
-		throw new Error("Both x and y must be greater than zero");
-	}
-
 	return Array(y).fill(Array(x).fill(0));
 }
 
-export function placeRobot(x: number, y: number, dirrection: string) {
-	console.log("placeRobot", x, y, dirrection);
+export function placeRobot(robot: Robot) {
+	room[robot.y][robot.x] = 1;
+	console.log("placeRobot", robot.x, robot.y, robot.direction);
 }
 
-export function moveRobot() {
+export function moveRobot(input: string, robot: Robot) {
 	console.log("moveRobot");
 }

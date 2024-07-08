@@ -7,8 +7,8 @@ export function integerCheck(answer: string): number {
 	return integer;
 }
 
-export function dirrectionCheck(answer: string) {
-	if (!["N", "E", "S", "W"].includes(answer)) {
+export function directionCheck(answer: string) {
+	if (!["N", "E", "S", "W", "n", "e", "s", "w"].includes(answer)) {
 		throw new Error("Input must be one of the following: N, E, S, W");
 	}
 
