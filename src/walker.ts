@@ -1,9 +1,9 @@
 import {
-	roomQuestions,
-	placeRobotQuestion,
 	moveRobotQuestion,
+	placeRobotQuestion,
+	roomQuestions,
 } from "./questions";
-import { detectCollition, turnLeft, turnRight, moveForward } from "./utils";
+import { detectCollition, moveForward, turnLeft, turnRight } from "./utils";
 
 export type Robot = {
 	x: number;
@@ -92,15 +92,15 @@ export function moveRobot(input: string, robot: Robot, room: Room): boolean {
 		throw new Error("Input is undefined");
 	}
 
-	for (const movement of input) {
+	for (const movement of input.toUpperCase()) {
 		switch (movement) {
-			case "l":
+			case "L":
 				robot.direction = turnLeft(robot.direction);
 				break;
-			case "r":
+			case "R":
 				robot.direction = turnRight(robot.direction);
 				break;
-			case "f": {
+			case "F": {
 				// Remove robot from current position
 				room[robot.y][robot.x] = 0;
 

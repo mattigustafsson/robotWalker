@@ -45,8 +45,8 @@ export function turnLeft(currentDirection: string): string {
 		E: "N",
 	};
 
-	const lowerCaseDirection = currentDirection.toUpperCase();
-	const newDirection = directionMap[lowerCaseDirection];
+	const upperCaseDirection = currentDirection.toUpperCase();
+	const newDirection = directionMap[upperCaseDirection];
 
 	return newDirection;
 }
@@ -58,8 +58,8 @@ export function turnRight(currentDirection: string): string {
 		S: "W",
 		W: "N",
 	};
-	const lowerCaseDirection = currentDirection.toUpperCase();
-	const newDirection = directionMap[lowerCaseDirection];
+	const upperCaseDirection = currentDirection.toUpperCase();
+	const newDirection = directionMap[upperCaseDirection];
 
 	return newDirection;
 }
