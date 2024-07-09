@@ -3,26 +3,29 @@ import {
 	placeRobotQuestion,
 	moveRobotQuestion,
 } from "./questions";
+import { detectCollition } from "./utils";
 
-type Robot = {
+export type Robot = {
 	x: number;
 	y: number;
 	direction: string;
 };
 
-let room: number[][];
+export type Room = (number | Robot)[][];
+
+let room: Room;
 let robot: Robot;
 
 export async function startWalk() {
-	const { width, height } = roomQuestions();
-	room = createArea(width, height);
+	const { x: roomX, y: roomY } = roomQuestions();
+	room = createRoom(roomX, roomY);
 
-	const { x, y, dir } = placeRobotQuestion();
-	robot = { x, y, direction: dir };
-	placeRobot(robot);
+	const { x: robotX, y: robotY, dir: robotDir } = placeRobotQuestion();
+	robot = { x: robotX, y: robotY, direction: robotDir };
+	placeRobot(robot, room);
 
 	const moveInput = moveRobotQuestion();
-	moveRobot(moveInput, robot);
+	moveRobot(moveInput, robot, room);
 
 	// Report back robot position and direction
 	// console.log(robot x, y and direction);
@@ -35,15 +38,37 @@ export async function startWalk() {
  * @returns A 2D array with dimensions x and y, filled with zeros.
  * @throws {Error} If x or y is less than or equal to zero.
  */
-export function createArea(x: number, y: number): number[][] {
-	return Array(y).fill(Array(x).fill(0));
+export function createRoom(x: number, y: number): Room {
+	if (x <= 0 || y <= 0) {
+		throw new Error("Both x and y must be greater than zero");
+	}
+	return Array.from({ length: y }, () => Array.from({ length: x }, () => 0));
 }
 
-export function placeRobot(robot: Robot) {
+/**
+ * Places a robot in a room at the specified coordinates and direction.
+ *
+ * @param {Robot} robot - The robot to be placed in the room.
+ * @param {Room} room - The room in which the robot is placed.
+ * @throws {Error} If the robot or room is undefined.
+ * @throws {Error} If the position of the robot is not a valid placing position.
+ */
+export function placeRobot(robot: Robot, room: Room): void {
+	if (!robot || !room) {
+		throw new Error("Robot or room is undefined");
+	}
+
+	if (detectCollition(robot, room)) {
+		throw new Error("Not a valid position placing position");
+	}
+
 	room[robot.y][robot.x] = 1;
-	console.log("placeRobot", robot.x, robot.y, robot.direction);
+	console.log(
+		`Placing Robot at coordinates x: ${robot.x}, y: ${robot.y} and direction: ${robot.direction}`,
+	);
 }
 
-export function moveRobot(input: string, robot: Robot) {
+export function moveRobot(input: string, robot: Robot, room: Room) {
+	detectCollition(robot, room);
 	console.log("moveRobot");
 }

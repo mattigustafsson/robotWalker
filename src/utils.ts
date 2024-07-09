@@ -1,3 +1,5 @@
+import type { Robot, Room } from "./walker";
+
 export function integerCheck(answer: string): number {
 	const integer = Number(answer);
 
@@ -25,4 +27,12 @@ export function promptWithNullCheck(message: string): string {
 		throw new Error("Input cannot be null");
 	}
 	return input;
+}
+
+export function detectCollition(robotPosition: Robot, room: Room): boolean {
+	const { x: robotX, y: robotY } = robotPosition;
+	const roomX = room[0].length;
+	const { length: roomY } = room;
+
+	return robotX < 0 || robotY < 0 || robotX >= roomX || robotY >= roomY;
 }
