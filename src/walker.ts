@@ -3,7 +3,7 @@ import {
 	placeRobotQuestion,
 	moveRobotQuestion,
 } from "./questions";
-import { detectCollition } from "./utils";
+import { detectCollition, turnLeft, turnRight, moveForward } from "./utils";
 
 export type Robot = {
 	x: number;
@@ -16,19 +16,30 @@ export type Room = (number | Robot)[][];
 let room: Room;
 let robot: Robot;
 
-export async function startWalk() {
-	const { x: roomX, y: roomY } = roomQuestions();
-	room = createRoom(roomX, roomY);
+/**
+ * Function to start the robot's walk journey.
+ *
+ */
+export function startWalk() {
+	try {
+		const { x: roomX, y: roomY } = roomQuestions();
+		room = createRoom(roomX, roomY);
 
-	const { x: robotX, y: robotY, dir: robotDir } = placeRobotQuestion();
-	robot = { x: robotX, y: robotY, direction: robotDir };
-	placeRobot(robot, room);
+		const { x: robotX, y: robotY, dir: robotDir } = placeRobotQuestion();
+		robot = { x: robotX, y: robotY, direction: robotDir };
+		placeRobot(robot, room);
 
-	const moveInput = moveRobotQuestion();
-	moveRobot(moveInput, robot, room);
-
-	// Report back robot position and direction
-	// console.log(robot x, y and direction);
+		const moveInput = moveRobotQuestion();
+		moveRobot(moveInput, robot, room);
+		console.log(
+			`Robot is at (${robot.x}, ${robot.y}) facing ${robot.direction}`,
+		);
+	} catch (error) {
+		if (error instanceof Error && error.message === "Collition detected") {
+			console.error(`Collition detected at (${robot.x}, ${robot.y})`);
+		}
+		throw error;
+	}
 }
 
 /**
@@ -68,7 +79,44 @@ export function placeRobot(robot: Robot, room: Room): void {
 	);
 }
 
-export function moveRobot(input: string, robot: Robot, room: Room) {
-	detectCollition(robot, room);
-	console.log("moveRobot");
+/**
+ * Moves the robot based on the input string, updating its position and direction.
+ *
+ * @param {string} input - The string containing movements for the robot (l: left, r: right, f: forward).
+ * @param {Robot} robot - The robot object with current position and direction.
+ * @param {Room} room - The room in which the robot is moving.
+ * @return {boolean} Returns true if the robot successfully moves without collision.
+ */
+export function moveRobot(input: string, robot: Robot, room: Room): boolean {
+	if (!input) {
+		throw new Error("Input is undefined");
+	}
+
+	for (const movement of input) {
+		switch (movement) {
+			case "l":
+				robot.direction = turnLeft(robot.direction);
+				break;
+			case "r":
+				robot.direction = turnRight(robot.direction);
+				break;
+			case "f": {
+				// Remove robot from current position
+				room[robot.y][robot.x] = 0;
+
+				const { x, y } = moveForward(robot);
+				robot.x = x;
+				robot.y = y;
+
+				if (detectCollition(robot, room)) {
+					throw new Error("Collition detected");
+				}
+
+				// Place robot in new position
+				placeRobot(robot, room);
+				break;
+			}
+		}
+	}
+	return true;
 }

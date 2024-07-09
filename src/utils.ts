@@ -36,3 +36,49 @@ export function detectCollition(robotPosition: Robot, room: Room): boolean {
 
 	return robotX < 0 || robotY < 0 || robotX >= roomX || robotY >= roomY;
 }
+
+export function turnLeft(currentDirection: string): string {
+	const directionMap: { [key: string]: string } = {
+		N: "W",
+		W: "S",
+		S: "E",
+		E: "N",
+	};
+
+	const lowerCaseDirection = currentDirection.toUpperCase();
+	const newDirection = directionMap[lowerCaseDirection];
+
+	return newDirection;
+}
+
+export function turnRight(currentDirection: string): string {
+	const directionMap: { [key: string]: string } = {
+		N: "E",
+		E: "S",
+		S: "W",
+		W: "N",
+	};
+	const lowerCaseDirection = currentDirection.toUpperCase();
+	const newDirection = directionMap[lowerCaseDirection];
+
+	return newDirection;
+}
+
+export function moveForward(robot: Robot): Robot {
+	const direction = robot.direction.toUpperCase();
+	switch (direction) {
+		case "N":
+			robot.y--;
+			break;
+		case "S":
+			robot.y++;
+			break;
+		case "E":
+			robot.x++;
+			break;
+		case "W":
+			robot.x--;
+			break;
+	}
+	return robot;
+}

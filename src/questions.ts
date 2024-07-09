@@ -52,14 +52,14 @@ export function placeRobotQuestion(): { x: number; y: number; dir: string } {
 
 /**
  * Asks the user to input a path for the robot.
- * @returns A string containing a path of valid inputs: 'l', 'r', or 'f'.
+ * @returns A string containing a path of valid inputs: 'l', 'r', and 'f'.
  * @throws {Error} If the user input is not a valid path for the robot.
  */
 export function moveRobotQuestion(): string {
 	let answer: string;
 	do {
 		answer = promptWithNullCheck(
-			"Input path of the robot, valid input is 'l', 'r', or 'f': ",
+			"Input path of the robot, valid input is 'l', 'r', and 'f': ",
 		);
 	} while (!moveCheck(answer));
 	return answer;
